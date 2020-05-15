@@ -15,7 +15,7 @@ export async function login(data) {
   }
 
   return request({
-    url: "/login",
+    url: "/publics/login",
     method: "post",
     data,
     headers: headers,
@@ -24,7 +24,7 @@ export async function login(data) {
 
 export function getInfo(accessToken) {
   return request({
-    url: "/user/info",
+    url: "/admin/info",
     method: "post",
     data: {
       accessToken,
@@ -34,7 +34,7 @@ export function getInfo(accessToken) {
 
 export function logout() {
   return request({
-    url: "/logout",
+    url: "/publics/logout",
     method: "post",
   });
 }

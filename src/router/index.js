@@ -398,7 +398,7 @@ export const asyncRoutes = [
 ];
 
 const router = new VueRouter({
-  mode: "hash",
+  mode: "history",
   scrollBehavior: () => ({
     y: 0,
   }),
@@ -407,7 +407,7 @@ const router = new VueRouter({
 
 export function resetRouter() {
   router.matcher = new VueRouter({
-    mode: "hash",
+    mode: "history",
     scrollBehavior: () => ({
       y: 0,
     }),

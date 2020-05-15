@@ -1,12 +1,12 @@
 module.exports = {
-  title: "vue-admin-beautiful", //标题
+  title: "Huachentv", //标题
   abbreviation: "byui", //简写
-  devPort: "80", //开发环境端口号
+  devPort: "81", //开发环境端口号
   version: "V1.0", //版本号
   copyright: "chuzhixin", //烦请保留版权，如需去除请联系群主
   routesWhiteList: ["/login", "/404", "/401"], //不经过token校验的路由
   loadingText: "正在加载中...", //加载时显示文字
-  tokenName: "accessToken", //token名称
+  tokenName: "Authorization", //token名称
   tokenTableName: "BYUI-VUE-TABLE", //token表名
   storage: "localStorage", //token存储位置
   logo: true, //是否显示logo
@@ -25,5 +25,5 @@ module.exports = {
   loginInterception: true, //是否开启登录拦截
   loginRSA: false, //是否开启登录RSA加密
   httpRequestFile: false, //是否依据mock数据生成webstorm HTTP Request请求文件
-  authentication: "intelligence", //intelligence和all两种方式，前者后端权限只控制permissions不控制view文件的import（前后端配合，减轻后端工作量），all方式完全交给后端前端只负责加载
+  authentication: "all", //intelligence和all两种方式，前者后端权限只控制permissions不控制view文件的import（前后端配合，减轻后端工作量），all方式完全交给后端前端只负责加载
 };
