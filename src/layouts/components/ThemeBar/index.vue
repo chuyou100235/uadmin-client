@@ -43,7 +43,7 @@
               </el-radio-group>
             </el-form-item>
             <el-form-item label="多标签">
-              <el-radio-group v-model="theme.tagsView">
+              <el-radio-group v-model="theme.tagsBar">
                 <el-radio-button label="true">开启</el-radio-button>
                 <el-radio-button label="false">不开启</el-radio-button>
               </el-radio-group>
@@ -82,6 +82,13 @@
               <el-color-picker
                 v-model="theme.menuBackgroundActive"
                 :predefine="['#22468a', '#1890ff', '#21e6af', '#f57e6c']"
+                show-alpha
+              ></el-color-picker>
+            </el-form-item>
+            <el-form-item label="菜单文字色">
+              <el-color-picker
+                v-model="theme.menuColor"
+                :predefine="['#000', '#fff']"
                 show-alpha
               ></el-color-picker>
             </el-form-item>
@@ -124,6 +131,7 @@ import variables from "@/styles/variables.scss";
 import { mapGetters } from "vuex";
 import { themeBar } from "@/config/settings";
 import GetCode from "./mixin/GetCode";
+
 export default {
   name: "ThemeBar",
   mixins: [GetCode],
@@ -134,10 +142,11 @@ export default {
       theme: {
         layout: "",
         header: "",
-        tagsView: "",
+        tagsBar: "",
         menuBackground: variables["menu-background"],
         menuChildrenBackground: variables["menu-children-background"],
         menuBackgroundActive: variables["menu-background-active"],
+        menuColor: variables["menu-color"],
         tagViewsBackgroundActive: variables["tagviews-background-active"],
         buttonBackground: variables["button-background"],
         paginationBackgroundActive: variables["pagination-background-active"],
@@ -145,7 +154,11 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["layout", "header", "tagsView"]),
+    ...mapGetters({
+      layout: "settings/layout",
+      header: "settings/header",
+      tagsBar: "settings/tagsBar",
+    }),
   },
   mounted() {
     this.$baseEventBus.$on("theme", () => {
@@ -156,7 +169,7 @@ export default {
     const theme = localStorage.getItem("BYUI-VUE-THEME");
     this.theme.layout = this.layout;
     this.theme.header = this.header;
-    this.theme.tagsView = this.tagsView;
+    this.theme.tagsBar = this.tagsBar;
     if (null !== theme) {
       this.$set(this.theme, "menuBackground", JSON.parse(theme).menuBackground);
       this.$set(
@@ -169,6 +182,7 @@ export default {
         "menuBackgroundActive",
         JSON.parse(theme).menuBackgroundActive
       );
+      this.$set(this.theme, "menuColor", JSON.parse(theme).menuColor);
       this.$set(
         this.theme,
         "tagViewsBackgroundActive",
@@ -199,10 +213,11 @@ export default {
       let {
         layout,
         header,
-        tagsView,
+        tagsBar,
         menuBackground,
         menuChildrenBackground,
         menuBackgroundActive,
+        menuColor,
         tagViewsBackgroundActive,
         buttonBackground,
         paginationBackgroundActive,
@@ -210,7 +225,63 @@ export default {
 
       let style = document.createElement("style");
       style.id = "BYUI-VUE-THEME";
-      style.innerHTML = ` .top-bar-container, .top-bar-container .byui-main, .side-bar-container, .logo-container-vertical, .logo-container-horizontal, .el-menu, .el-menu-item, .el-submenu.is-active.is-opened, .el-submenu__title, .el-menu-item.is-active, .el-menu-item .is-active { background-color:${menuBackground}!important; } body .el-menu--horizontal .top-bar-item-container  .el-menu-item:hover, body .el-menu--horizontal .top-bar-item-container .el-menu-item.is-active, body .app-wrapper .side-bar-container .el-submenu .el-menu-item.is-active, body .app-wrapper .side-bar-container  .el-menu-item:hover,body .side-bar-container .el-menu .el-menu-item.is-active{ background-color:${menuBackgroundActive}!important; } .tags-view-item.router-link-exact-active.router-link-active.active{ background-color: ${tagViewsBackgroundActive}!important; border: 1px solid ${tagViewsBackgroundActive}!important; } .el-button.el-button--primary{background-color: ${buttonBackground}!important;border-color: ${buttonBackground}!important;} .el-pagination.is-background .el-pager li:not(.disabled).active{background-color: ${paginationBackgroundActive}!important;border-color: ${paginationBackgroundActive}!important;}body .app-wrapper .side-bar-container .nest-menu .el-menu-item {background-color: ${menuChildrenBackground} !important;}`;
+      style.innerHTML = `
+        .top-bar-container,
+        .top-bar-container .byui-main,
+        .side-bar-container,
+        .logo-container-vertical,
+        .logo-container-horizontal,
+        .el-menu,
+        .el-menu-item,
+        .el-submenu.is-active.is-opened,
+        .el-submenu__title,
+        .el-menu-item.is-active,
+        .el-menu-item .is-active {
+          background-color:${menuBackground}!important;
+        }
+
+        body .el-menu--horizontal .top-bar-item-container .el-menu-item:hover,
+        body .el-menu--horizontal .top-bar-item-container .el-menu-item.is-active,
+        body .app-wrapper .side-bar-container .el-submenu .el-menu-item.is-active,
+        body .app-wrapper .side-bar-container .el-menu-item:hover,
+        body .side-bar-container .el-menu .el-menu-item.is-active {
+          background-color:${menuBackgroundActive}!important;
+        }
+
+        .tags-bar-item.router-link-exact-active.router-link-active.active {
+          background-color: ${tagViewsBackgroundActive}!important;
+          border: 1px solid ${tagViewsBackgroundActive}!important;
+        }
+
+        .el-button.el-button--primary {
+          background-color: ${buttonBackground}!important;
+          border-color: ${buttonBackground}!important;
+        }
+
+        .el-pagination.is-background .el-pager li:not(.disabled).active {
+          background-color: ${paginationBackgroundActive}!important;
+          border-color: ${paginationBackgroundActive}!important;
+        }
+
+        body .app-wrapper .side-bar-container .nest-menu .el-menu-item {
+          background-color: ${menuChildrenBackground}!important;
+        }
+
+        body .app-wrapper .side-bar-container .el-menu .nest-menu [class*=menu] {
+          background-color: ${menuChildrenBackground}!important
+        }
+
+        body .app-wrapper .side-bar-container .el-menu .nest-menu [class*=menu].is-active {
+          background-color:${menuBackgroundActive}!important
+        }
+        body .app-wrapper .side-bar-container .el-menu [class*=menu] span,
+        body .app-wrapper .side-bar-container .el-menu [class*=menu] svg,
+        body .app-wrapper .side-bar-container .el-menu [class*=menu] i
+        {
+          color:${menuColor}!important
+        }
+
+      `;
       document.getElementsByTagName("head").item(0).appendChild(style);
       localStorage.setItem(
         "BYUI-VUE-THEME",
@@ -218,17 +289,18 @@ export default {
             "menuBackground":"${menuBackground}",
             "menuChildrenBackground":"${menuChildrenBackground}",
             "menuBackgroundActive":"${menuBackgroundActive}",
+            "menuColor":"${menuColor}",
             "tagViewsBackgroundActive":"${tagViewsBackgroundActive}",
             "layout":"${layout}",
             "header":"${header}",
-            "tagsView":"${tagsView}",
+            "tagsBar":"${tagsBar}",
             "buttonBackground":"${buttonBackground}",
             "paginationBackgroundActive":"${paginationBackgroundActive}"
           }`
       );
       this.handleSwitchLayout(layout);
       this.handleSwitchHeader(header);
-      this.handleSwitchTagsView(tagsView);
+      this.handleSwitchTagsBar(tagsBar);
       this.drawerVisible = false;
     },
     handleSaveTheme() {
@@ -250,8 +322,8 @@ export default {
     handleSwitchHeader(header) {
       this.$store.dispatch("settings/changeHeader", header);
     },
-    handleSwitchTagsView(tagsView) {
-      this.$store.dispatch("settings/changeTagsView", tagsView);
+    handleSwitchTagsBar(tagsBar) {
+      this.$store.dispatch("settings/changeTagsBar", tagsBar);
     },
   },
 };

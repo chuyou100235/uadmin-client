@@ -1,16 +1,16 @@
 import request from "@/utils/request";
 
-export function getList(params) {
+export function getList(data) {
   return request({
-    url: params.url,
-    method: params.method,
-    data: params.data,
+    url: "/word/getList",
+    method: "post",
+    data,
   });
 }
 
 export function doEdit(data) {
   return request({
-    url: "/table/doEdit",
+    url: "/word/doEdit",
     method: "post",
     data,
   });
@@ -18,7 +18,7 @@ export function doEdit(data) {
 
 export function doDelete(data) {
   return request({
-    url: "/table/doDelete",
+    url: "/word/doDelete",
     method: "post",
     data,
   });

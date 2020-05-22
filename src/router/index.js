@@ -43,6 +43,11 @@ export const asyncRoutes = [
       },
     ],
   },
+  {
+    path: "/image",
+    component: () => import("@/views/byui/word/image"),
+    hidden: true,
+  },
   /* {
     path: "/test",
     component: Layout,
@@ -60,39 +65,7 @@ export const asyncRoutes = [
       },
     ],
   }, */
-  {
-    path: "/mall",
-    component: Layout,
-    redirect: "noRedirect",
-    name: "Mall",
-    meta: {
-      title: "商城模板",
-      icon: "shopping-cart",
-      permissions: ["admin"],
-    },
-    alwaysShow: true,
 
-    children: [
-      {
-        path: "pay",
-        name: "Pay",
-        component: () => import("@/views/mall/pay/index"),
-        meta: {
-          title: "支付",
-          noKeepAlive: true,
-        },
-      },
-      {
-        path: "goods",
-        name: "Goods",
-        component: () => import("@/views/mall/goods/index"),
-        meta: {
-          title: "商品",
-          noKeepAlive: true,
-        },
-      },
-    ],
-  },
   {
     path: "/byui",
     component: Layout,
@@ -360,6 +333,12 @@ export const asyncRoutes = [
         meta: { title: "新闻（可能存在跨域）", permissions: ["admin"] },
       },
       {
+        path: "word",
+        name: "Word",
+        component: () => import("@/views/byui/word/index"),
+        meta: { title: "word下载", permissions: ["admin"] },
+      },
+      {
         path: "more",
         name: "More",
         component: () => import("@/views/byui/more/index"),
@@ -367,7 +346,47 @@ export const asyncRoutes = [
       },
     ],
   },
+  {
+    path: "/mall",
+    component: Layout,
+    redirect: "noRedirect",
+    name: "Mall",
+    meta: {
+      title: "商城模板",
+      icon: "shopping-cart",
+      permissions: ["admin"],
+    },
+    alwaysShow: true,
 
+    children: [
+      {
+        path: "pay",
+        name: "Pay",
+        component: () => import("@/views/mall/pay/index"),
+        meta: {
+          title: "支付",
+          noKeepAlive: true,
+        },
+        children: null,
+      },
+      {
+        path: "goodsList",
+        name: "GoodsList",
+        component: () => import("@/views/mall/goodsList/index"),
+        meta: {
+          title: "商品列表",
+        },
+      },
+      {
+        path: "goodsDetail",
+        name: "GoodsDetail",
+        component: () => import("@/views/mall/goodsDetail/index"),
+        meta: {
+          title: "商品详情",
+        },
+      },
+    ],
+  },
   {
     path: "/error",
     component: EmptyLayout,
@@ -398,7 +417,7 @@ export const asyncRoutes = [
 ];
 
 const router = new VueRouter({
-  mode: "history",
+  mode: "hash",
   scrollBehavior: () => ({
     y: 0,
   }),
@@ -407,7 +426,7 @@ const router = new VueRouter({
 
 export function resetRouter() {
   router.matcher = new VueRouter({
-    mode: "history",
+    mode: "hash",
     scrollBehavior: () => ({
       y: 0,
     }),

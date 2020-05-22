@@ -10,7 +10,7 @@
       <byui-keel-text :lines="8" />
     </byui-keel>
     <transition mode="out-in" name="fade-transform">
-      <keep-alive :include="cachedViews" :max="10">
+      <keep-alive :include="cachedRoutes" :max="10">
         <router-view :key="key" style="min-height: 78vh;" />
       </keep-alive>
     </transition>
@@ -19,7 +19,7 @@
       <byui-icon :icon="['fas', 'copyright']"></byui-icon>
       {{ fullYear }} {{ copyright }}
       <br />
-      贵州行铺网络科技有限公司 技术支持
+      我的目标不是做一名优秀的前端leader，我的目标是帮助到更多优秀的前端leader，停留在这句话的你一定会是或者已经是其中最优秀的那一个
     </footer>
   </section>
 </template>
@@ -29,6 +29,7 @@ import { ByuiKeel, ByuiKeelHeading, ByuiKeelText } from "@/plugins/byuiKeel";
 import { mapGetters } from "vuex";
 import GithubCorner from "@/components/GithubCorner";
 import { copyright } from "@/config/settings";
+
 export default {
   name: "AppMain",
   components: {
@@ -46,7 +47,10 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["cachedViews", "device"]),
+    ...mapGetters({
+      cachedRoutes: "tagsBar/cachedRoutes",
+      device: "settings/device",
+    }),
     key() {
       return this.$route.path;
     },
@@ -54,7 +58,7 @@ export default {
   watch: {
     $route(to, from) {
       this.$nextTick(() => {
-        if (this.$store.state.tagsView.skeleton) {
+        if (this.$store.state.tagsBar.skeleton) {
           this.show = true;
           setTimeout(() => {
             this.show = false;

@@ -15,13 +15,13 @@
       <el-col :xs="20" :sm="12" :md="12" :lg="12" :xl="12">
         <div class="right-panel">
           <error-log />
-          <byui-screenfull @refresh="refreshSelectedTag"></byui-screenfull>
+          <byui-screenfull @refresh="refreshRoute"></byui-screenfull>
           <theme-bar></theme-bar>
           <byui-icon
             title="重载路由"
             :pulse="pulse"
             :icon="['fas', 'redo']"
-            @click="refreshSelectedTag"
+            @click="refreshRoute"
           />
           <el-dropdown @command="handleCommand">
             <span class="el-dropdown-link">
@@ -60,7 +60,7 @@
 import { mapGetters } from "vuex";
 import ErrorLog from "@/components/ErrorLog";
 import ByuiScreenfull from "@/components/ByuiScreenfull";
-import Breadcrumb from "@/layouts/components/Breadcrumb";
+import Breadcrumb from "zx-breadcrumb";
 import ThemeBar from "@/layouts/components/ThemeBar";
 
 export default {
@@ -77,15 +77,14 @@ export default {
     };
   },
   computed: {
-    ...mapGetters([
-      "avatar",
-      "collapse",
-      "userName",
-      "loginTimes",
-      "lastLoginTime",
-      "selectedTag",
-      "device",
-    ]),
+    ...mapGetters({
+      avatar: "user/avatar",
+      collapse: "settings/collapse",
+      userName: "user/userName",
+      visitedRoutes: "tagsBar/visitedRoutes",
+      device: "settings/device",
+      routes: "permission/routes",
+    }),
   },
   methods: {
     handleCollapse() {
@@ -103,18 +102,29 @@ export default {
         }
       );
     },
-    refreshSelectedTag() {
+    refreshRoute() {
+      const arr = this.visitedRoutes.filter((item, index) => {
+        if (item.path === this.$route.fullPath) {
+          return item;
+        }
+      });
+      const view = arr[0];
       this.pulse = true;
-      this.$router
-        .replace({
-          path: "/redirect" + this.$route.fullPath,
-        })
-        .then(() => {
-          setTimeout(() => {
-            this.pulse = false;
-          }, 1000);
-        })
-        .catch(() => {});
+      this.$store.dispatch("tagsBar/delCachedRoutes", view).then(() => {
+        const { fullPath } = view;
+        this.$nextTick(() => {
+          this.$router
+            .replace({
+              path: "/redirect" + this.$route.fullPath,
+            })
+            .then(() => {
+              setTimeout(() => {
+                this.pulse = false;
+              }, 1000);
+            })
+            .catch(() => {});
+        });
+      });
     },
     handleCommand(command) {
       switch (command) {

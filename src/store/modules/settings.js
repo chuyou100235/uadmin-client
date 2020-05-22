@@ -1,13 +1,22 @@
 import defaultSettings from "@/config/settings";
-const { tagsView, logo, layout, header } = defaultSettings;
+
+const { tagsBar, logo, layout, header } = defaultSettings;
 const theme = JSON.parse(localStorage.getItem("BYUI-VUE-THEME")) || "";
 const state = {
-  tagsView: theme.tagsView || tagsView,
+  tagsBar: theme.tagsBar || tagsBar,
   logo: logo,
   collapse: false,
   layout: theme.layout || layout,
   header: theme.header || header,
   device: "desktop",
+};
+const getters = {
+  collapse: (state) => state.collapse,
+  device: (state) => state.device,
+  header: (state) => state.header,
+  layout: (state) => state.layout,
+  logo: (state) => state.logo,
+  tagsBar: (state) => state.tagsBar,
 };
 const mutations = {
   changeLayout: (state, layout) => {
@@ -20,9 +29,9 @@ const mutations = {
       state.header = header;
     }
   },
-  changeTagsView: (state, tagsView) => {
-    if (tagsView) {
-      state.tagsView = tagsView;
+  changeTagsBar: (state, tagsBar) => {
+    if (tagsBar) {
+      state.tagsBar = tagsBar;
     }
   },
   changeCollapse: (state) => {
@@ -45,8 +54,8 @@ const actions = {
   changeHeader({ commit }, header) {
     commit("changeHeader", header);
   },
-  changeTagsView({ commit }, tagsView) {
-    commit("changeTagsView", tagsView);
+  changeTagsBar({ commit }, tagsBar) {
+    commit("changeTagsBar", tagsBar);
   },
   changeCollapse({ commit }) {
     commit("changeCollapse");
@@ -61,4 +70,4 @@ const actions = {
     commit("toggleDevice", device);
   },
 };
-export default { state, mutations, actions };
+export default { state, getters, mutations, actions };

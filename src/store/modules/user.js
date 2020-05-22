@@ -1,3 +1,4 @@
+import Vue from "vue";
 import { getInfo, login, logout } from "@/api/user";
 import {
   getAccessToken,
@@ -5,9 +6,14 @@ import {
   setAccessToken,
 } from "@/utils/accessToken";
 import { resetRouter } from "@/router";
-import { Notification } from "element-ui";
 import defaultSettings from "@/config/settings";
+
 const state = { accessToken: getAccessToken(), userName: "", permissions: [] };
+const getters = {
+  accessToken: (state) => state.accessToken,
+  userName: (state) => state.userName,
+  permissions: (state) => state.permissions,
+};
 const mutations = {
   setAccessToken: (state, accessToken) => {
     state.accessToken = accessToken;
@@ -25,11 +31,10 @@ const actions = {
     return new Promise((resolve, reject) => {
       login({ userName, password })
         .then((response) => {
-          const { accessToken } = response.data;
+          const accessToken = response.data[defaultSettings.tokenName];
           commit("setAccessToken", accessToken);
           setAccessToken(accessToken);
-          const time = new Date();
-          const hour = time.getHours();
+          const hour = new Date().getHours();
           const thisTime =
             hour < 8
               ? "早上好"
@@ -40,12 +45,10 @@ const actions = {
               : hour < 18
               ? "下午好"
               : "晚上好";
-          Notification({
-            title: thisTime + "!",
-            message: "欢迎登录" + defaultSettings.title,
-            type: "success",
-            duration: 2000,
-          });
+          Vue.prototype.$baseNotify(
+            `欢迎登录${defaultSettings.title}`,
+            `${userName}，${thisTime}！`
+          );
           resolve();
         })
         .catch((error) => {
@@ -62,9 +65,6 @@ const actions = {
             reject("验证失败，请重新登录...");
           }
           let { permissions, userName } = data;
-          if (!permissions || permissions.length <= 0) {
-            permissions = ["*"];
-          }
           commit("setPermissions", permissions);
           commit("setUserName", userName);
           resolve(data);
@@ -82,7 +82,7 @@ const actions = {
           commit("setPermissions", []);
           removeAccessToken();
           resetRouter();
-          dispatch("tagsView/delAllViews", null, { root: true });
+          dispatch("tagsBar/delAllRoutes", null, { root: true });
           resolve();
         })
         .catch((error) => {
@@ -98,4 +98,4 @@ const actions = {
     });
   },
 };
-export default { state, mutations, actions };
+export default { state, getters, mutations, actions };

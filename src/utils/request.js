@@ -1,17 +1,18 @@
 import axios from "axios";
 import {
+  contentType,
   invalidCode,
   messageDuration,
   noPermissionCode,
   requestTimeout,
   successCode,
   tokenName,
-  contentType,
 } from "@/config/settings";
 import { Loading, Message } from "element-ui";
 import store from "@/store";
 import qs from "qs";
 import router from "@/router";
+
 const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API,
   timeout: requestTimeout,
@@ -22,8 +23,8 @@ const service = axios.create({
 let loadingInstance;
 service.interceptors.request.use(
   (config) => {
-    if (store.getters.accessToken) {
-      config.headers[tokenName] = store.getters.accessToken;
+    if (store.getters["user/accessToken"]) {
+      config.headers[tokenName] = store.getters["user/accessToken"];
     }
     if (process.env.NODE_ENV !== "test") {
       if (contentType === "application/x-www-form-urlencoded;charset=UTF-8") {
@@ -39,7 +40,8 @@ service.interceptors.request.use(
       config.url.includes("set") ||
       config.url.includes("update") ||
       config.url.includes("import") ||
-      config.url.includes("export")
+      config.url.includes("export") ||
+      config.url.includes("save")
     ) {
       loadingInstance = Loading.service();
     }
@@ -70,7 +72,7 @@ service.interceptors.response.use(
       switch (code) {
         case invalidCode:
           errorMsg(msg || `后端接口${code}异常`);
-          store.dispatch("user/resetToken");
+          store.dispatch("user/resetAccessToken");
           break;
         case noPermissionCode:
           router.push({

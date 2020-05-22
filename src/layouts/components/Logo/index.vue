@@ -19,7 +19,10 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["logo", "layout"]),
+    ...mapGetters({
+      logo: "settings/logo",
+      layout: "settings/layout",
+    }),
   },
 };
 </script>
@@ -37,7 +40,7 @@ export default {
   width: 32px;
   height: 32px;
   margin-right: 5px;
-  color: $base-title;
+  color: $base-title-color;
   vertical-align: middle;
 }
 
@@ -47,7 +50,7 @@ export default {
   font-size: $base-font-size-max;
   font-weight: 600;
   line-height: 55px;
-  color: $base-title;
+  color: $base-title-color;
   text-overflow: ellipsis;
   white-space: nowrap;
   vertical-align: middle;

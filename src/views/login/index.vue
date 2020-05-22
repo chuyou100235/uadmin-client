@@ -1,5 +1,11 @@
 <template>
   <div class="login-container">
+    <el-alert
+      title="beautiful boys and girls欢迎加入vue-admin-beautifulQQ群：972435319"
+      type="success"
+      :closable="false"
+    >
+    </el-alert>
     <div class="login-logo-bysj"></div>
     <el-row>
       <el-col :xs="24" :sm="24" :md="24" :lg="8" :xl="8">
@@ -152,7 +158,7 @@ export default {
         this.$refs.password.focus();
       });
     },
-    handleLogin() {
+    async handleLogin() {
       this.$refs.loginForm.validate((valid) => {
         if (valid) {
           this.loading = true;
