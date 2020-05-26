@@ -1,6 +1,7 @@
 <template>
   <div class="login-container">
     <el-alert
+      v-if="nodeEnv !== 'development'"
       title="beautiful boys and girls欢迎加入vue-admin-beautifulQQ群：972435319"
       type="success"
       :closable="false"
@@ -66,7 +67,7 @@
             :loading="loading"
             class="login-btn"
             type="primary"
-            @click.native.prevent="handleLogin"
+            @click="handleLogin"
             >登录
           </el-button>
         </el-form>
@@ -103,6 +104,7 @@ export default {
       }
     };
     return {
+      nodeEnv: process.env.NODE_ENV,
       title: this.$baseTitle,
       loginForm: {
         userName: "",

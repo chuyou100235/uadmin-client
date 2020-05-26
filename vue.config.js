@@ -8,7 +8,16 @@ const FileManagerPlugin = require("filemanager-webpack-plugin");
 const date = require("dayjs")().format("YYYY_M_D");
 const time = require("dayjs")().format("YYYY-M-D HH:mm:ss");
 const CompressionWebpackPlugin = require("compression-webpack-plugin");
-const productionGzipExtensions = ["html", "js", "css", "svg"];
+
+const productionGzipExtensions = [
+  "js",
+  "css",
+  "sass",
+  "scss",
+  "svg",
+  "vue",
+  "ttf",
+];
 
 function resolve(dir) {
   return path.join(__dirname, dir);

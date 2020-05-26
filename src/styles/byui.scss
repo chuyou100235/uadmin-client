@@ -2,7 +2,6 @@
 
 @import "./transition.scss";
 @import "./loading.scss";
-@import "./quill.scss";
 
 $base: ".byui";
 
@@ -122,7 +121,7 @@ html {
 
     /* 大图展示结束 */
 
-    .app-wrapper {
+    .vue-admin-beautiful-wrapper {
       .app-main-container {
         @include base-scrollbar;
 

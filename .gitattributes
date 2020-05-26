@@ -8,3 +8,4 @@
 *.md text eol=lf
 *.json text eol=lf
 *.yml text eol=lf
+*.js linguist-language=Vue

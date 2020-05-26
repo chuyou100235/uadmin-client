@@ -1,7 +1,7 @@
 <template>
   <div :class="'logo-container-' + layout">
     <router-link to="/">
-      <byui-remix-icon class="logo" icon-class="vuejs-fill" />
+      <byui-remix-icon v-if="logo" class="logo" icon-class="vuejs-fill" />
       <span class="title" :title="title">
         {{ title }}
       </span>
@@ -10,7 +10,7 @@
 </template>
 <script>
 import { mapGetters } from "vuex";
-
+import { logo } from "@/config/settings";
 export default {
   name: "Logo",
   data() {

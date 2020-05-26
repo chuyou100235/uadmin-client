@@ -14,12 +14,11 @@
         <router-view :key="key" style="min-height: 78vh;" />
       </keep-alive>
     </transition>
-    <footer class="footer-copyright">
+    <footer v-if="nodeEnv !== 'development'" class="footer-copyright">
       Copyright
       <byui-icon :icon="['fas', 'copyright']"></byui-icon>
       {{ fullYear }} {{ copyright }}
       <br />
-      我的目标不是做一名优秀的前端leader，我的目标是帮助到更多优秀的前端leader，停留在这句话的你一定会是或者已经是其中最优秀的那一个
     </footer>
   </section>
 </template>

@@ -1,20 +1,30 @@
 import request from "@/utils/request";
 import { encryptedData } from "@/utils/encrypt";
-import { loginRSA } from "@/config/settings";
+import { getPublicKey } from "@/api/publicKey";
+import { loginRSA, contentType } from "@/config/settings";
 export async function login(data) {
+  let headers = {
+    "Content-Type": contentType,
+  };
   if (loginRSA) {
     data = await encryptedData(data);
+    await getPublicKey().then((res) => {
+      if (!res.data.mockServer)
+        headers = { "Content-Type": "application/json;charset=utf-8" };
+    });
   }
+
   return request({
-    url: "/publics/login",
+    url: "/core/publics/login",
     method: "post",
     data,
+    headers: headers,
   });
 }
 
 export function getInfo(accessToken) {
   return request({
-    url: "/admin/info",
+    url: "/core/admin/info",
     method: "post",
     data: {
       accessToken,
@@ -24,7 +34,7 @@ export function getInfo(accessToken) {
 
 export function logout() {
   return request({
-    url: "/admin/logout",
+    url: "/core/admin/logout",
     method: "post",
   });
 }

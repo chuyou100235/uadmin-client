@@ -1,5 +1,5 @@
 <template>
-  <div class="app-wrapper" :class="classObj">
+  <div class="vue-admin-beautiful-wrapper" :class="classObj">
     <div
       v-if="'horizontal' === layout"
       class="layout-container-horizontal"
@@ -56,7 +56,7 @@ import ByuiMain from "@/components/ByuiMain";
 import ByuiBackToTop from "@/components/ByuiBackToTop";
 import { mapGetters } from "vuex";
 import { tokenName } from "@/config/settings";
-import Media from "zx-media/mixin/Media";
+import Media from "./mixin/Media";
 
 export default {
   name: "Layout",
@@ -118,7 +118,7 @@ export default {
   overflow: hidden;
 }
 
-.app-wrapper {
+.vue-admin-beautiful-wrapper {
   position: relative;
   width: 100%;
   height: 100%;

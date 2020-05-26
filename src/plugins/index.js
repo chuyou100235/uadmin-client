@@ -10,7 +10,6 @@ import "@/colorfulIcon";
 import "@/config/permission";
 import "@/utils/errorLog";
 import "./f12";
-import drag from "@/directive/drag";
 import permission from "@/directive/permission";
 import "./byuiIcon";
 import ByuiQueryForm from "@/components/ByuiQueryForm";
@@ -20,7 +19,6 @@ import ByuiQueryFormLeftPanel from "@/components/ByuiQueryForm/ByuiQueryFormLeft
 import ByuiQueryFormRightPanel from "@/components/ByuiQueryForm/ByuiQueryFormRightPanel";
 
 Vue.use(permission);
-Vue.use(drag);
 Vue.use(byui);
 
 Vue.component("byui-query-form", ByuiQueryForm);

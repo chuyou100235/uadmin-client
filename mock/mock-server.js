@@ -40,12 +40,7 @@ const responseFake = (url, type, respond) => {
     url: new RegExp(`${process.env.VUE_APP_BASE_API}${url}`),
     type: type || "get",
     response(req, res) {
-      if (JSON.stringify(req.body) !== "{}") {
-        console.log(chalk.green(`> 请求地址：${req.path}`));
-        console.log(chalk.green(`> 请求参数：${JSON.stringify(req.body)}\n`));
-      } else {
-        console.log(chalk.green(`> 请求地址：${req.path}\n`));
-      }
+      console.log(chalk.magentaBright(`请求mock接口地址: ${req.path}`));
       res.json(
         Mock.mock(respond instanceof Function ? respond(req, res) : respond)
       );
@@ -78,19 +73,17 @@ module.exports = (app) => {
         try {
           app._router.stack.splice(mockStartIndex, mockRoutesLength);
 
-          Object.keys(require.cache).forEach((item) => {
-            if (item.includes(mockDir)) {
-              delete require.cache[require.resolve(item)];
+          Object.keys(require.cache).forEach((i) => {
+            if (i.includes(mockDir)) {
+              delete require.cache[require.resolve(i)];
             }
           });
-
           const mockRoutes = registerRoutes(app);
           mockRoutesLength = mockRoutes.mockRoutesLength;
           mockStartIndex = mockRoutes.mockStartIndex;
-
-          //console.log(chalk.blue(`> Mock服务热更新成功：${path}`));
+          console.log(chalk.magentaBright(`\n > Mock服务热更新成功  ${path}`));
         } catch (error) {
-          console.log(chalk.red(error));
+          console.log(chalk.redBright(error));
         }
       }
     });
