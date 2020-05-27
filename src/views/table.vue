@@ -1,18 +1,16 @@
 <template>
-  <div>
-    列表页
-  </div>
+  <div>列表页</div>
 </template>
 
 <script>
-import { GetFetchData } from "@/api/router";
+import { sendHttp } from "@/api/router";
 export default {
-  name: "Table",
+  name: "Index",
   components: {},
   data() {
     return {
       nodeEnv: process.env.NODE_ENV,
-      httpparams: {
+      initifyData: {
         url: "",
         data: {},
         method: "get",
@@ -20,16 +18,24 @@ export default {
     };
   },
   created() {
+    // 获取初始化信息
+    this.initifyData.url = this.$route.apiurl;
+    this.initifyData.data = this.$route.params;
+    this.initifyData.method = this.$route.method;
+
+    // 获取初始化信息
     this.initify();
   },
   mounted() {},
   methods: {
+    // 获取初始化信息
     initify() {
-      console.log(this.httpparams);
-      GetFetchData(this.httpparams).then((res) => {
-        let resutl = res.data;
-        console.log(res);
-      });
+      if (this.initifyData.url) {
+        sendHttp(this.initifyData).then((res) => {
+          let resutl = res.data;
+          console.log(res);
+        });
+      }
     },
   },
 };

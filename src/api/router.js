@@ -7,7 +7,7 @@ export function getRouterList(data) {
     data,
   });
 }
-export function GetFetchData(params) {
+export function sendHttp(params) {
   return request({
     url: params.url,
     method: params.method,
